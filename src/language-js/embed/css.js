@@ -145,6 +145,41 @@ function isStyledComponents({ parent }) {
   }
 }
 
+function isCssCallExpr(node) {
+  return (
+    node &&
+    node.type === "CallExpression" &&
+    node.callee.type === "Identifier" &&
+    node.callee.name === "css"
+  );
+}
+
+/**
+ * Gem template literals
+ */
+function isGemStyles({ node, parent, grandparent, ancestors }) {
+  if (!parent || node.type !== "TemplateLiteral") {
+    return false;
+  }
+
+  // styled``
+  const styled =
+    parent.type === "TaggedTemplateExpression" &&
+    isStyledIdentifier(parent.tag);
+
+  // css({ a: '' })
+  const cssProp =
+    parent.type === "Property" &&
+    grandparent &&
+    grandparent.type === "ObjectExpression" &&
+    isCssCallExpr(ancestors.at(2));
+
+  // css(media.PHONE, '')
+  const cssArg = isCssCallExpr(parent) && parent.arguments.at(-1) === node;
+
+  return styled || cssProp || cssArg;
+}
+
 /**
  * JSX element with CSS prop
  */
@@ -161,6 +196,7 @@ function printCss(path /*, options*/) {
   if (
     isStyledJsx(path) ||
     isStyledComponents(path) ||
+    isGemStyles(path) ||
     isCssProp(path) ||
     isAngularComponentStyles(path)
   ) {

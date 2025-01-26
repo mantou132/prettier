@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`css-embed.js format 1`] = `
+====================================options=====================================
+parsers: ["typescript"]
+printWidth: 80
+                                                                                | printWidth
+=====================================input======================================
+css(mediaQuery.PHONE, \`:host{display:none}\`)
+css({
+  cls: \`
+    display: none;
+  \`
+})
+css({ cls: styled\`display:none\`})
+
+=====================================output=====================================
+css(
+  mediaQuery.PHONE,
+  \`
+    :host {
+      display: none;
+    }
+  \`,
+);
+css({
+  cls: \`
+    display: none;
+  \`,
+});
+css({
+  cls: styled\`
+    display: none;
+  \`,
+});
+
+================================================================================
+`;

@@ -114,7 +114,9 @@ function isHtml(path) {
       (node, name) =>
         node.type === "TaggedTemplateExpression" &&
         node.tag.type === "Identifier" &&
-        node.tag.name === "html" &&
+        (node.tag.name === "html" ||
+          node.tag.name === "mathml" ||
+          node.tag.name === "svg") &&
         name === "quasi",
     )
   );
